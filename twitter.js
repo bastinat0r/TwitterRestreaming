@@ -1,11 +1,11 @@
 /* Restreaming Data from the Twitter-Streaming API */
 
 var https = require('https'),
-	http = require('http'),
 	util = require('util'),
 	url = require('url');
+var irc = require('irc');
 
-var trackstring = "track=test";
+var trackstring = "track=netz39";
 
 var options = {
 	host : 'stream.twitter.com',
@@ -18,7 +18,15 @@ var options = {
 	method : 'POST',
 }
 
-var responses = [];
+var bot = new irc.Client('irc.freenode.net', 'netz39twitter', {
+	channels: ['#netz39']
+});
+
+bot.on('error', function(err) {
+	util.puts(JSON.stringify(err));
+});
+
+bot.join("#netz39");
 
 var req = https.request(options, function(res) {
 
@@ -30,9 +38,7 @@ var req = https.request(options, function(res) {
 			if(/^\{/.test(dat)) {
 				var tweet = JSON.parse(dat);
 				if(tweet.user) {
-					pushStr(' ');
-					pushStr(tweet.user.screen_name);
-					pushStr(tweet.text);
+					bot.say("#netz39",tweet.user.screen_name + ': ' + tweet.text);
 				}
 			}
 		} catch (err) {
@@ -45,23 +51,6 @@ var req = https.request(options, function(res) {
 
 req.write(trackstring);
 req.end();
-
-var srv = http.createServer(function(clientreq, res) {
-	responses.push(res);
-	res.writeHead(200, {'Content-Type' : 'text/plain'});
-
-	query = url.parse(clientreq.url).query;
-});
-
-
-function pushStr(dat) {
-	responses.forEach(function(res) {
-		res.write(dat);
-		res.write('\n');
-	});
-}
-
-srv.listen(8080);
 
 req.on('error', function(e) {
 	util.puts(e);
