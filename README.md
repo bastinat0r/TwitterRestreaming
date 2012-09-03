@@ -1,4 +1,4 @@
-#Branch irc
+#IRC-Bot for #Netz39
 Posting Tweets for Netz39 to our irc-Channel on freenode
 
 ##Usage
