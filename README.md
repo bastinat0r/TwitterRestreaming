@@ -2,7 +2,7 @@
 Posting Tweets for Netz39 to our irc-Channel on freenode
 
 ##Usage
-node twitter.js username password
+<pre> <code> node twitter.js username password </pre> </code>
 // username and password is required by the twitter Streaming API
 
 ##ToDo
