@@ -7,3 +7,7 @@ node twitter.js username password
 
 ##ToDo
 * Adding OAuth
+
+##Dependencies
+The irc Package from npm
+<pre> <code> npm install irc </code> </pre>
